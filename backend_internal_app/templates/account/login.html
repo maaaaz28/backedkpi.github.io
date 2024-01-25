@@ -1,0 +1,57 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+{% load account socialaccount %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}
+  {% translate "Sign In" %}
+{% endblock head_title %}
+
+{% block inner %}
+  <div class="card" style="width: 28rem; margin: auto; margin-top: 50px; background:#55608f">
+    <div class="card-body">
+      <h1 class="card-title" style="color: #50c2a5;">{% translate "Sign In" %}</h1>
+      
+      {% get_providers as socialaccount_providers %}
+      {% if socialaccount_providers %}
+        <p style="color: #50c2a5;">
+          <p style="color: #50c2a5;">{% translate "Please sign in with one of your existing third-party accounts:" %}</p>
+          {% if ACCOUNT_ALLOW_REGISTRATION %}
+            {% blocktranslate trimmed %}
+              Or, <a style="color: #50c2a5;" href="{{ signup_url }}">sign up</a>
+              for a {{ site_name }} account and sign in below:
+            {% endblocktranslate %}
+          {% endif %}
+        </p>
+        <div class="socialaccount_ballot">
+          <ul class="socialaccount_providers">
+            {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+          </ul>
+          <div style="color: #50c2a5;" class="login-or">{% translate "or" %}</div>
+        </div>
+        {% include "socialaccount/snippets/login_extra.html" %}
+      {% else %}
+        {% if ACCOUNT_ALLOW_REGISTRATION %}
+          <p>
+            {% blocktranslate trimmed %}
+              <p style="color: #50c2a5;"> If you have not created an account yet, then please </p>
+              <p style="color: #50c2a5;"> <a style="color: #50c2a5;" href="{{ signup_url }}">sign up</a></p> <p style="color: #50c2a5;">first.</p>
+            {% endblocktranslate %}
+          </p>
+        {% endif %}
+      {% endif %}
+      <form style="color: #50c2a5;" class="login" method="post" action="{% url 'account_login' %}">
+        {% csrf_token %}
+        {{ form|crispy }}
+        {% if redirect_field_value %}
+          <input style="color: #50c2a5;" type="hidden"
+                 name="{{ redirect_field_name }}"
+                 value="{{ redirect_field_value }}" />
+        {% endif %}
+        <a style="color: #50c2a5;" class="button secondaryAction" href="{% url 'account_reset_password' %}">{% translate "Forgot Password?" %}</a>
+        <button style="background-color: #50c2a5; color: #263044;" class="primaryAction btn btn-primary" type="submit">{% translate "Sign In" %}</button>
+      </form>
+    </div>
+  </div>
+{% endblock inner %}

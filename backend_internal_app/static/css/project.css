@@ -1,0 +1,202 @@
+/* These styles are generated from project.scss. */
+
+.alert-debug {
+  color: black;
+  background-color: white;
+  border-color: #d6e9c6;
+}
+
+.alert-error {
+  color: #f74643;
+  background-color: #f2dede;
+  border-color: #eed3d7;
+}
+
+
+html,
+body {
+  height: 1pc;
+}
+
+.subheading{
+  color: #adfd6bef;
+  font-size: 30px;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif ;
+}
+body {
+  margin: 0;
+  background: linear-gradient(45deg, #104a70, #160522);
+  font-family: sans-serif;
+  font-weight: 100;
+}
+
+.container {
+  position: absolute;
+  top: 30%;
+  left: 35%;
+  bottom: 26%;
+  scale: 560px;
+  width: 800px;
+  transform: translate(-50%, -50%);
+}
+
+table {
+  width: 170px;
+  height: 450px;
+  border-collapse: collapse;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  }
+
+th,
+td {
+  padding: 15px;
+  background-color: rgba(255,255,255,0.2);
+  color: #fff;
+}
+
+th {
+  text-align: left;
+}
+
+thead {
+  th {
+    background-color: #55608f;
+  }
+}
+
+tbody {
+  tr {
+    &:hover {
+      background-color: rgba(74, 79, 126, 0.795);
+      
+    }
+  }
+  td {
+    position: relative;
+    &:hover {
+      &:before {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: -9999px;
+        bottom: -9999px;
+        background-color: rgba(134, 72, 72, 0.527);
+        z-index: -1;
+      }
+    }
+  }
+}
+.tablehead{
+  background-color: #263044;
+  
+}
+.heading1 
+h1{
+  font-family: monospace ;
+  color: #50c2a5;
+  font-style:inherit ;
+  font-weight: 250px; 
+  margin-bottom: 300px;
+}
+.container-fluid{
+  border-radius: 45px;
+  border-color: #55608f;
+  background-color: #263044;
+}
+.nav-link{
+  color: #d6e9c6;
+}
+@keyframes fluctuate {
+  0% { transform: translateY(0); }
+  25% { transform: translateY(-5px); }
+  50% { transform: translateY(5px); }
+  75% { transform: translateY(-3px); }
+  100% { transform: translateY(3px); }
+}
+.navbar-brand{
+  animation: fluctuate 2s infinite;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: #f2dede;
+}
+.mt-4 {
+  position:relative ;
+  box-sizing:border-box ;
+  height: 476px;
+  width: 690px;
+  margin-left: 760px;
+  bottom: 660px;
+
+}
+.table-bordered {
+  border-collapse: collapse;
+  width: 100%;
+  border-radius: 20px; /* Set border-radius for round corners */
+  overflow: hidden; /* Hide overflow for rounded corners */
+}
+
+.table-bordered th, .table-bordered td {
+  border: 0px solid #000000;
+  text-align: left;
+  padding: 8px;
+  border-radius: 43px; /* Set border-radius for round corners */
+}
+
+.tablehead th {
+  background-color: #263044;
+  color: white;
+}
+
+
+
+@import url(https://fonts.googleapis.com/css?family=Abril+Fatface|Roboto:400,400italic,500,500italic);
+
+@keyframes wiggle {
+  0% { transform: skewX(24deg); } 
+  10% { transform: skewX(-8deg); }
+  20% { transform: skewX(55deg); }
+  30% { transform: skewX(-90deg); }
+  40% { transform: skewX(29deg); }
+  50% { transform: skewX(-90deg); }
+  60% { transform: skewX(3deg); }
+  70% { transform: skewX(-2deg); }
+  80% { transform: skewX(1deg); }
+  90% { transform: skewX(10deg); }
+  100% { transform: skewX(0deg); }
+}
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+header {
+  display: flex;
+}
+
+header:hover {
+  animation: wiggle 0.4s;
+}
+
+h1 {
+  position: relative;
+  font-family: 'sans-serif';
+  font-weight: normal;
+  font-size: 35px;
+  text-align: center;
+  margin-left: 350px;
+  margin-bottom: 60px;
+  cursor: pointer;
+  color: rgba(61, 235, 70, 0.95);
+  text-shadow: 1px 1px rgba(246, 0, 153, 0.8),
+               -1px -1px rgba(15, 210, 255, 0.8),
+               -1px 0px rgba(255, 210, 0, 1);
+}
+
+h1:hover {
+  animation: wiggle 0.3s 2;
+  text-shadow: 30px 13px rgba(246, 0, 153, 0.8),
+               -38px -4px rgba(15, 210, 255, 0.8),
+               -2px -4px rgba(255, 210, 0, 1);
+}

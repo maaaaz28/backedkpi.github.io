@@ -1,0 +1,258 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<header>
+  
+  <h1>DASHBOARD!!<br>_</h1>
+  
+</header>
+<div class="container">
+  
+  <h2 class="subheading">{{ user_qualities.user.username }}'s</h2>
+  <form method="get" action="{% url 'dashboard' %}">
+    <div class="tablehead" style="background-color: #263044; border-radius: 10px; padding: 10px;">
+      <label for="userFilter" style="color: white;">Select User:</label>
+      <select id="userFilter" name="userFilter" style="background-color: #ecf0f1; border-radius: 5px;">
+        {% for user in all_users %}
+          <option value="{{ user.id }}" {% if user.id == user_qualities.user.id %}selected{% endif %}>{{ user.username }}</option>
+        {% endfor %}
+      </select>
+      <label for="dateFilter" style="color: white;">Select Date:</label>
+      <input type="date" id="dateFilter" name="dateFilter" onchange="dateFilter" style="background-color: #ecf0f1; border-radius: 5px;">
+      <button type="submit" style="background-color: rgba(134, 72, 72, 0.527); color: white; border: none; padding: 8px 15px; border-radius: 10px; height: 36px;">Filter</button>
+    </div>
+  </form>
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <thead class="tablehead">
+        <tr>
+          <th>QUALITY</th>
+          <th>
+            SCORE
+            </th>
+          <th>
+            DATE</th>
+        </tr>
+      </thead>
+      <tbody>
+         <tr>
+          <td>Sense of Responsibility</td>
+          <td>{{ user_qualities.sense_of_responsibility|default:"No data"  }}</td>
+          <td>{{ user_qualities.create_date |default:"No data" }}</td>
+        </tr>
+        <tr>
+          <td>Quality of Work</td>
+          <td>{{ user_qualities.quality_of_work |default:"No data" }}</td>
+          <td>{{ user_qualities.create_date |default:"No data" }}</td>
+        </tr>
+              <tr>
+          <td>Conceptual Design Ability</td>
+          <td>{{ user_qualities.conceptual_design_ability |default:"No data" }}</td>
+          <td>{{ user_qualities.create_date |default:"No data" }}</td>
+        </tr>
+        <tr>
+          <td>Problem Solving Ability</td>
+          <td>{{ user_qualities.problem_solving_ability |default:"No data" }}</td>
+          <td>{{ user_qualities.create_date|default:"No data"  }}</td>
+        </tr>
+        <tr>
+          <td>Technical Programming Skills</td>
+          <td>{{ user_qualities.technical_programming_skills|default:"No data"  }}</td>
+          <td>{{ user_qualities.create_date|default:"No data"  }}</td>
+        </tr>
+        <tr>
+          <td>Takes Initiative</td>
+          <td>{{ user_qualities.takes_initiative |default:"No data" }}</td>
+          <td>{{ user_qualities.create_date |default:"No data" }}</td>
+        </tr>
+        <td>Team Work</td>
+          <td>{{ user_qualities.team_work |default:"No data" }}</td>
+          <td>{{ user_qualities.create_date |default:"No data" }}</td>
+        </tr>
+        <td>Productivity</td>
+        <td>{{ user_qualities.productivity |default:"No data" }}</td>
+        <td>{{ user_qualities.create_date |default:"No data" }}</td>
+        </tr>
+        <td>Independant Work</td>
+          <td>{{ user_qualities.independent_work |default:"No data" }}</td>
+          <td>{{ user_qualities.create_date |default:"No data" }}</td>
+        </tr>
+        <td>Honesty Integrity</td>
+          <td>{{ user_qualities.honesty_integrity |default:"No data" }}</td>
+          <td>{{ user_qualities.create_date |default:"No data" }}</td>
+        </tr>
+        <td>Consistency</td>
+          <td>{{ user_qualities.work_consistency |default:"No data" }}</td>
+          <td>{{ user_qualities.create_date |default:"No data" }}</td>
+        </tr>
+        <td>Capacity of Change</td>
+          <td>{{ user_qualities.capacity_for_change |default:"No data" }}</td>
+          <td>{{ user_qualities.create_date |default:"No data" }}</td>
+        </tr>
+        <td>Client Relations</td>
+          <td>{{ user_qualities.client_relations |default:"No data" }}</td>
+          <td>{{ user_qualities.create_date |default:"No data" }}</td>
+        </tr>
+        <td>Communication Skills</td>
+          <td>{{ user_qualities.communication |default:"No data" }}</td>
+          <td>{{ user_qualities.create_date |default:"No data" }}</td>
+        </tr>
+        <td>Strategic Perspecive</td>
+          <td>{{ user_qualities.strategic_perspective |default:"No data" }}</td>
+          <td>{{ user_qualities.create_date |default:"No data" }}</td>
+        </tr>
+        <td>Punctuality/Attendance</td>
+          <td>{{ user_qualities.punctuality_attendance |default:"No data" }}</td>
+          <td>{{ user_qualities.create_date |default:"No data" }}</td>
+  
+        </tr>
+        <td>Takes Initiative</td>
+          <td>{{ user_qualities.takes_initiative |default:"No data" }}</td>
+          <td>{{ user_qualities.create_date |default:"No data" }}</td>
+        </tr>
+        <td>Appearance</td>
+          <td>{{ user_qualities.professional_appearance |default:"No data" }}</td>
+          <td>{{ user_qualities.create_date |default:"No data" }}</td>
+        </tr> 
+
+      </tbody>
+    </table>
+  </div>
+
+
+<!-- Include Highcharts library -->
+<!-- Pie Chart Section -->
+<div class="mt-4">
+  <div id="pieChart" style="width: 620px; height: 500px;"></div>
+</div>
+
+<!-- Your custom script for the Pie Chart -->
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/drilldown.js"></script>
+<script>
+  var pieChartData = {
+    series: [{
+      name: 'Qualities',
+      colorByPoint: true,
+      data: [{
+        name: "Responsibility",
+        y: {{ user_qualities.sense_of_responsibility }},
+        drilldown: 'responsibility'
+      }, {
+        name: "Work Quality",
+        y: {{ user_qualities.quality_of_work }},
+        drilldown: 'workQuality'
+      },{
+        name: "Conceptual Design Ability",
+        y: {{ user_qualities.conceptual_design_ability }},
+        drilldown: 'conceptualDesign'
+      },{
+        name: "Problem Solving Ability",
+        y: {{ user_qualities.problem_solving_ability }},
+        drilldown: 'problemSolving'
+      },{
+        name: "Technical Programming Skills",
+        y: {{ user_qualities.technical_programming_skills }},
+        drilldown: 'technicalProgramming'
+      },{
+        name: "Takes Initiative",
+        y: {{ user_qualities.takes_initiative }},
+        drilldown: 'takesInitiative'
+      },{
+        name: "Team Work",
+        y: {{ user_qualities.team_work }},
+        drilldown: 'teamWork'
+      },{
+        name: "Productivity",
+        y: {{ user_qualities.productivity }},
+        drilldown: 'productivity'
+      }, {
+        name: "Independence",
+        y: {{ user_qualities.independent_work }},
+        drilldown: 'independence'
+      },{
+        name: "Honesty Integrity",
+        y: {{ user_qualities.honesty_integrity }},
+        drilldown: 'honestyIntegrity'
+      }, {
+        name: "Consistency",
+        y: {{ user_qualities.work_consistency }},
+        drilldown: 'consistency'
+      },
+      {
+        name: "Capacity For Change",
+        y: {{ user_qualities.capacity_for_change }},
+        drilldown: 'capacityForChange'
+      },
+      {
+        name: "Client Relations",
+        y: {{ user_qualities.client_relations }},
+        drilldown: 'clientRelations'
+      },
+      {
+        name: "Communication Skills",
+        y: {{ user_qualities.communication }},
+        drilldown: 'communicationSkills'
+      },
+      {
+        name: "Strategic Perspective",
+        y: {{ user_qualities.strategic_perspective }},
+        drilldown: 'strategicPerspective'
+      },
+      {
+        name: "Punctuality Attendance",
+        y: {{ user_qualities.punctuality_attendance }},
+        drilldown: 'punctualityAttendance'
+      },
+      {
+        name: "Professional Appearance",
+        y: {{ user_qualities.professional_appearance }},
+        drilldown: 'professionalAppearance'
+      },
+      // Add more qualities as needed
+      ]
+    }]
+  };
+
+  var pieChartOptions = {
+    chart: {
+      type: 'pie',
+      backgroundColor: 'rgba(0, 0, 0, 0)' // Transparent background
+    },
+    title: {
+      text: "PROGRESS ",
+      style: {
+        color: "white",
+        fontSize: "30px",
+        top: "50px"
+      }
+    },
+    plotOptions: {
+      pie: {
+        allowPointSelect: true,
+        cursor: 'pointer',
+        dataLabels: {
+          enabled: true,
+          format: '{point.name}: {point.y:.2f}%',
+          style: {
+            color: "black",
+            fontSize: '16px',
+            fontFamily: 'Arial, sans-serif'
+          }
+        },
+        borderColor: null,
+        states: {
+          hover: {
+            borderWidth: "13px"
+          }
+        }
+      }
+    },
+    series: pieChartData.series,
+  };
+
+  var pieChart = Highcharts.chart('pieChart', pieChartOptions);
+</script>
+
+{% endblock %}
+
