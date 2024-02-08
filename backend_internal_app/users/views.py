@@ -36,8 +36,26 @@ user_update_view = UserUpdateView.as_view()
 class UserRedirectView(LoginRequiredMixin, RedirectView):
     permanent = False
 
+    def get(self,request,*args,**kwargs):
+        
+        import pdb;pdb.set_trace()
+
+        if self.request.user.is_superuser:
+            return reverse("course-page")
+        else:
+
+            return reverse("users:detail", kwargs={"username": self.request.user.username})
+
+        
+
     def get_redirect_url(self):
-        return reverse("users:detail", kwargs={"username": self.request.user.username})
+        import pdb;pdb.set_trace()
+
+        if self.request.user.is_superuser:
+            return reverse("course-page")
+        else:
+
+            return reverse("users:detail", kwargs={"username": self.request.user.username})
 
 
 user_redirect_view = UserRedirectView.as_view()

@@ -92,7 +92,7 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "backend_internal_app.users",
     "backend_internal_app2",
-    "adminside",
+    "attendance",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

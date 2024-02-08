@@ -6,8 +6,16 @@ from django.views import defaults as default_views
 from django.views.generic import TemplateView
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework.authtoken.views import obtain_auth_token
-from adminside.views import adminlogin_view, adminsignup_view
+# from adminside.views import adminlogin_view, adminsignup_view
 from backend_internal_app2.views import user_qualities
+from attendance import views
+# from . import views
+from django.contrib import admin
+from django.urls import path
+from django.contrib.auth import views as auth_views
+from django.views.generic.base import RedirectView
+
+# from adminside.views import dashboard_view
 urlpatterns = [
     path("", user_qualities, name='dashboard'),
     path("about/", TemplateView.as_view(template_name="pages/about.html"), name="about"),
@@ -17,10 +25,15 @@ urlpatterns = [
     path("users/", include("backend_internal_app.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
     path('dashboard/', user_qualities, name='dashboard'),
-    path('adminlogin/', adminlogin_view, name='adminlogin'),
-    path('backendadmin/', adminlogin_view, name='admindboard'),
-    path('adminsignup/', adminsignup_view, name='adminsignup'),
-
+    # path('adminlogin/', adminlogin_view, name='adminlogin'),
+    # path('backendadmin/', adminlogin_view, name='admindboard'),
+    # path('adminsignup/', adminsignup_view, name='adminsignup'),
+    path('adminside/', include("attendance.urls")),
+    # path('admindashboard/', dashboard_view, name='admindashbaord'),
+    path('redirect-admin', RedirectView.as_view(url="/admin"),name="redirect-admin"),
+    # path('', views.home, name="home-page"),
+    # path('login',auth_views.LoginView.as_view(template_name="login.html",redirect_authenticated_user = True),name='login'),
+ 
     # Your stuff: custom urls includes go here
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
