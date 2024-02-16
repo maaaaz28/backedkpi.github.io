@@ -19,8 +19,8 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow border-bottom">
         <div class="container">
             <!-- Navbar brand -->
-            <a class="navbar-brand" target="_blank" href="{% url 'course-page' %}">
-                <link href="{%url 'course-page'  %}"> BACKEND INTERNAL| ADMIN</link>
+            <a class="navbar-brand" target="_blank" href="{% url 'employee' %}">
+                <link href="{%url 'employee'  %}"> BACKEND INTERNAL| ADMIN</link>
             </a>
             <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarExample01" aria-controls="navbarExample01" aria-expanded="false" aria-label="Toggle navigation">
       <i class="fas fa-bars"></i>
@@ -30,7 +30,8 @@
                 <ul class="navbar-nav d-flex flex-row">
                     {% if user.id %} {% if user.profile.user_type == 1 %} {% endif %}
                     <li class="nav-item me-3 me-lg-0">
-                        <a class="nav-link"> Hey,Admin!
+                        <a class="nav-link" href="{% url 'assign_qualities' %}">
+                            <span class="me-1"></span>ADD KPI SCORES
                         </a>
                         <!-- <a class="nav-link" href="{% url 'logout' %}">Logout</a> -->
                     </li>
@@ -39,7 +40,7 @@
                     </li>
                     {% else %}
                     <li class="nav-item me-3 me-lg-0">
-                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                        <a class="nav-link" href="{% url 'employee' %}">Login</a>
                     </li>
                     {% endif %}
                     <!-- Icons -->

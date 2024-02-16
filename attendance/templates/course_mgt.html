@@ -24,24 +24,25 @@
                         <tr class="bg-gradient bg-primary bg-opacity-50 text-light">
                             <th class="px-2 py-2 text-center">#</th>
                             <th class="px-2 py-2 text-center">NAME</th>
-                            <th class="px-2 py-2 text-center">DEPARTMENT</th>
-                            <th class="px-2 py-2 text-center">DATE</th>
+                            <th class="px-2 py-2 text-center">DATE JOINED</th>
                             <th class="px-2 py-2 text-center">STATUS</th>
                             <th class="px-2 py-2 text-center">ACTION</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {% for course in courses %}
+                   <tbody>
+                        {% for user in users %}
                         <tr>
-                            <td class="px-2 py-1 align-middle">{{ course.id }}</td>
-                            <td class="px-2 py-1 align-middle">{{ course.name }}</td>
-                            <td class="px-2 py-1 align-middle">{{ course.department }}</td>
-                            <td class="px-2 py-1 align-middle">{{ course.date_added }}</td>
+                            <td class="px-2 py-1 align-middle">{{ user.id }}</td>
+                            <td class="px-2 py-1 align-middle">{{ user.username }}</td>
+                            <td class="px-2 py-1 align-middle">{{ user.date_joined }}</td>
                             <td class="px-2 py-1 align-middle text-center">
-                                {% if course.status == 1 %}
-                                <span class="badge bg-primary rounded-pill px-3">Active</span> {% else %}
-                                <span class="badge bg-secondary rounded-pill px-3">Inactive</span> {% endif %}
+                                {% if user.is_active %}
+                                <span class="badge bg-primary rounded-pill px-3">Active</span>
+                                {% else %}
+                                <span class="badge bg-secondary rounded-pill px-3">Inactive</span>
+                                {% endif %}
                             </td>
+                          
                             <td class="px-2 py-1 align-middle text-center">
                                 <a class="btn btn-outline-primary btn-sm edit-data" href="javascript:void(0)" data-id="{{ course.pk }}" title="Edit">
                                     <i class="fa fa-edit"></i>
@@ -59,17 +60,21 @@
     </div>
 </div>
 {% endblock pageContent %} {% block ScriptBlock %}
+
 <script>
     $(function() {
         $('#add_new').click(function() {
-            uni_modal('<i class="fa fa-plus"></i> Add Course', '{% url "manage-course-modal" %}', 'modal-md')
-        })
+            uni_modal('<i class="fa fa-plus"></i> Add User', '{% url "manage-course-modal" %}', 'modal-md');
+            $('#userModal').modal('show');
+        });
+
         $('.edit-data').click(function() {
-            uni_modal('<i class="fa fa-edit"></i> Edit Course', '{% url "manage-course-modal" %}/' + $(this).attr('data-id'), 'modal-md')
-        })
+            uni_modal('<i class="fa fa-edit"></i> Edit User', '{% url "manage-course-modal" %}/' + $(this).attr('data-id'), 'modal-md');
+        });
+
         $('.delete-data').click(function() {
-            _conf("Are you sure to delete this course permanently?", "delete_course", [$(this).attr('data-id')])
-        })
+            _conf("Are you sure to delete this user permanently?", "delete_user", [$(this).attr('data-id')]);
+        });
 
         $('#course-list').DataTable({
             columnDefs: [{
@@ -77,50 +82,116 @@
                 targets: 4
             }],
             initComplete: function(settings, json) {
-                $('table td, table th').addClass('px-2 py-1')
+                $('table td, table th').addClass('px-2 py-1');
             },
             drawCallback: function(settings) {
-                $('table td, table th').addClass('px-2 py-1')
+                $('table td, table th').addClass('px-2 py-1');
             }
-        })
-    })
+        });
+    });
 
-    function delete_course($id) {
+    function delete_user(user_id) {
         start_loader();
-        var _this = $(this)
+        var _this = $(this);
         $('.err-msg').remove();
-        var el = $('<div>')
-        el.addClass("alert alert-danger err-msg")
-        el.hide()
+        var el = $('<div>');
+        el.addClass("alert alert-danger err-msg");
+        el.hide();
+
         $.ajax({
             url: '{% url "delete-course" %}',
             headers: {
-                'X-CSRFToken': "{{csrf_token}}"
+                'X-CSRFToken': "{{ csrf_token }}"
             },
             method: 'POST',
             data: {
-                id: $id
+                id: user_id
             },
             dataType: 'json',
-            error: err => {
-                console.log(err)
-                el.text('An error occurred.')
-                el.show('slow')
-                end_loader()
+            error: function(err) {
+                console.log(err);
+                el.text('An error occurred.');
+                el.show('slow');
+                end_loader();
             },
             success: function(resp) {
                 if (resp.status == 'success') {
-                    location.reload()
+                    location.reload();
                 } else if (!!resp.msg) {
-                    el.text('An error occurred.')
-                    el.show('slow')
+                    el.text('An error occurred.');
+                    el.show('slow');
                 } else {
-                    el.text('An error occurred.')
-                    el.show('slow')
+                    el.text('An error occurred.');
+                    el.show('slow');
                 }
-                end_loader()
+                end_loader();
             }
-        })
+        });
+    }
+    $('#addUserForm').submit(function (e) {
+        e.preventDefault();
+        var formData = $(this).serialize();
+        
+        $.ajax({
+            url: '{% url "manage-course-modal" %}', // Update with your actual URL for adding users
+            method: 'POST',
+            data: formData,
+            dataType: 'json',
+            success: function (response) {
+                if (response.status === 'success') {
+                    // Close the modal
+                    $('#userModal').modal('hide');
+                    // Update the user list
+                    updateUsersTable(response.users); // Create this function
+                } else {
+                    // Handle error cases
+                    console.error('Error adding user:', response.error);
+                }
+            },
+            error: function (err) {
+                console.error('AJAX Error:', err);
+            }
+        });
+    });
+    
+    // Function to update the user list in DataTable
+    function updateUsersTable(users) {
+        // Clear existing table rows
+        $('#user-list tbody').empty();
+    
+        // Append new user data
+        $.each(users, function (index, user) {
+            var row = '<tr>' +
+                '<td class="px-2 py-1 align-middle">' + user.id + '</td>' +
+                '<td class="px-2 py-1 align-middle">' + user.username + '</td>' +
+                '<td class="px-2 py-1 align-middle">' + user.date_joined + '</td>' +
+                '<td class="px-2 py-1 align-middle text-center">' + (user.is_active ? '<span class="badge bg-primary rounded-pill px-3">Active</span>' : '<span class="badge bg-secondary rounded-pill px-3">Inactive</span>') + '</td>' +
+                '<td class="px-2 py-1 align-middle text-center">' +
+                '<a class="btn btn-outline-primary btn-sm edit-data" href="javascript:void(0)" data-id="' + user.pk + '" title="Edit">' +
+                '<i class="fa fa-edit"></i>' +
+                '</a>' +
+                '<button class="btn btn-outline-danger btn-sm delete-data" type="button" data-id="' + user.pk + '" title="Delete">' +
+                '<i class="fa fa-trash"></i>' +
+                '</button>' +
+                '</td>' +
+                '</tr>';
+            $('#user-list tbody').append(row);
+        });
+    
+        // Refresh DataTable
+        $('#user-list').DataTable().destroy();
+        $('#user-list').DataTable({
+            columnDefs: [{
+                orderable: false,
+                targets: 4
+            }],
+            initComplete: function (settings, json) {
+                $('table td, table th').addClass('px-2 py-1');
+            },
+            drawCallback: function (settings) {
+                $('table td, table th').addClass('px-2 py-1');
+            }
+        });
     }
 </script>
 {% endblock ScriptBlock %}

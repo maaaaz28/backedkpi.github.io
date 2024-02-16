@@ -1,0 +1,24 @@
+{% extends 'base5.html' %} 
+{% block pageContent %}
+    <div class="col-lg-32 col-md-32 col-sm-32 col-xs-32">
+        <div class="card card-default rounded-30 shadow">
+            <div class="card-header">
+                <div class="d-flex w-50 align-items-center justify-content-between">
+                    <h5 class="modal-title" id="addScoreModalLabel">ADD SCORE</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+            <div class="text-light">
+                <form method="post" action="{% url 'assign_qualities' %}">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary">Add Scores</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Your existing HTML code -->
+{% endblock pageContent %}

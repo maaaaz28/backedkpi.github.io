@@ -8,7 +8,7 @@ def user_qualities(request):
     current_user = request.user
 
     # Filter non-superusers and active users
-    all_users = User.objects.filter(is_superuser=False, is_active=True)
+    all_users = User.objects.filter( is_superuser=False, is_active=True)
 
     if request.method == 'GET':
         user_id = request.GET.get('userFilter', current_user.id)

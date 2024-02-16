@@ -11,8 +11,7 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.db.models import Q
-from attendance.forms import CustomUserCreationForm, QualitiesForm
-# from attendance.forms import SaveCourse
+from attendance.forms import CustomUserCreationForm
 # from attendance.models import Course, Department
 # from ams.settings import MEDIA_ROOT, MEDIA_URL
 # from attendance.models import Department
@@ -40,55 +39,44 @@ def logoutuser(request):
 def course(request):
     context ={}
     users = User.objects.all()
-    print(users)
     
     context['page_title'] = "BACKEND INTERNAL | ADMIN"
-    context['users'] = users
+    context['user'] = users
     return render(request, 'course_mgt.html',context)
 
-@login_required
-def manage(request): 
-    if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('course_mgt')
-    else:
-        form = CustomUserCreationForm()
-        users=User.objects.all()
-        context={'form': form, 'users': users}
-        return render(request, 'manage_course.html', context )
+# @login_required
+# def manage_course(request, pk=None):
+#     pass
 
-def dashboard(request):
-    courses = User.objects.all()
-    return render(request, 'course_mgt.html', {'courses': courses})
-    pass
+# @login_required
+# def save_course(request, pk=None):
+#     pass
 
-@login_required
-def assign_qualities(request):
-    if request.method == 'POST':
-        form = QualitiesForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('dashboard')  
-    else:
-        form = QualitiesForm()
-        users = User.objects.all()
-        context = {'form': form, 'users': users}
-        return render(request, 'addscore.html', context)
-@login_required
-def save_course(request, pk=None):
-    pass
+# @login_required
+# def delete_course(request, pk=None):
+#     pass
 
-@login_required
-def delete_course(request, pk=None):
-    pass
+# @login_required
+# def assign_marks(request, pk=None):
+#     pass
 
-@login_required
-def assign_marks(request, pk=None):
-    pass
+# from .forms import CustomUserCreationForm  # Import the form
 
-@login_required
+# @login_required
+# def register_view(request):
+#     if request.method == 'POST':
+#         form = CustomUserCreationForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             user = form.save()
+#             login(request, user)
+#             messages.success(request, 'Registration successful. You are now logged in.')
+#             return redirect('employee')  
+#         else:
+#             messages.error(request, 'Error during registration. Please check the form.')
+#     else:
+#         form = CustomUserCreationForm()
+
+#     return render(request, 'manage_course.html', {'form': form})
 
 
 # @login_required
@@ -139,3 +127,25 @@ def delete_course(request):
 #     course_ids = list(map(int, course_ids_str.split(',')))
 
 #     return render(request, 'assign-marks.html', {'courses': courses, 'course_ids': course_ids})
+            user_qualities = QualitiesForm.objects.create(
+                user=user,
+                sense_of_responsibility=form.cleaned_data['sense_of_responsibility'],
+                quality_of_work=form.cleaned_data['quality_of_work'],
+                conceptual_design_ability =form.cleaned_data['conceptual_design_ability'],
+                problem_solving_ability=form.cleaned_data['problem_solving_ability'],
+                technical_programming_skills =form.cleaned_data['technical_programming_skills'],
+                takes_initiative=form.cleaned_data['takes_initiative' ], 
+                team_work =form.cleaned_data['team_work' ], 
+                productivity=form.cleaned_data[ 'productivity'], 
+                independent_work =form.cleaned_data['independent_work'],
+                honesty_integrity=form.cleaned_data['honesty_integrity'], 
+                work_consistency=form.cleaned_data['work_consistency'], 
+                capacity_for_change=form.cleaned_data[ 'capacity_for_change'] ,
+                client_relations=form.cleaned_data['client_relations'], 
+                communication =form.cleaned_data[ 'communication' ], 
+                strategic_perspective=form.cleaned_data['strategic_perspective'] , 
+                punctuality_attendance =form.cleaned_data[ 'punctuality_attendance'] , 
+                        
+                # Add other fields from the form here
+                create_date=create_date
+            )
