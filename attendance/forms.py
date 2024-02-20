@@ -16,7 +16,7 @@ class CustomUserCreationForm(forms.ModelForm):
     class Meta:
         model = Qualities
         exclude= [ 'sense_of_responsibility', 'quality_of_work' ,'conceptual_design_ability','problem_solving_ability','technical_programming_skills', 'takes_initiative' , 'team_work' , 'productivity', 'independent_work', 'honesty_integrity', 'work_consistency', 'capacity_for_change' , 'client_relations', 'communication' , 'strategic_perspective' , 'punctuality_attendance' , 'professional_appearance']
-        field=[User]
+        
     def save(self, commit=True):
         user = super(CustomUserCreationForm, self).save(commit=False)
         user.set_password(self.cleaned_data["password"])
@@ -29,3 +29,9 @@ class QualitiesForm(forms.ModelForm):
         model = Qualities
         exclude = ['date_updated']
         # 'sense_of_responsibility', 'quality_of_work' ,'conceptual_design_ability','problem_solving_ability','technical_programming_skills', 'takes_initiative' , 'team_work' , 'productivity', 'independent_work', 'honesty_integrity', 'work_consistency', 'capacity_for_change' , 'client_relations', 'communication' , 'strategic_perspective' , 'punctuality_attendance' , 'professional_appearance'
+
+
+class QForm(forms.ModelForm):
+    class Meta:
+        model = Qualities
+        exclude = ['date_updated''sense_of_responsibility', 'quality_of_work' ,'conceptual_design_ability','problem_solving_ability','technical_programming_skills', 'takes_initiative' , 'team_work' , 'productivity', 'independent_work', 'honesty_integrity', 'work_consistency', 'capacity_for_change' , 'client_relations', 'communication' , 'strategic_perspective' , 'punctuality_attendance' , 'professional_appearance']

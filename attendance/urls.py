@@ -13,5 +13,6 @@ urlpatterns = [
     path('delete_employee',views.delete_course,name='delete-course'),
     path('manage_course',views.manage,name='manage-course-modal'),
     path('assign_qualities/', views.assign_qualities, name='assign_qualities'),
+    path('history/', views.view_scores_history, name='score'),
 
 ]

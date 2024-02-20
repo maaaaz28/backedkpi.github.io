@@ -1,0 +1,38 @@
+{% extends 'base5.html' %} 
+{% block pageContent %}
+    <div class="col-lg-32 col-md-32 col-sm-32 col-xs-32">
+        <div class="card card-default rounded-30 shadow">
+            <div class="card-header">
+                <div class="d-flex w-50 align-items-center justify-content-between">
+                    <h5 class="modal-title" id="addScoreModalLabel">HISTORY</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+            <div class="text-light">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>USERNAME:</th>
+                            <th>CREATED:</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in previous_users %}
+                            <tr>
+                                <td>{{ user.user.username }}</td>
+                                <td>{{ user.create_date }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+                <!-- Display Latest User -->
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- Your existing HTML code -->
+{% endblock pageContent %}

@@ -1,7 +1,7 @@
 from unicodedata import category
 from aiohttp import request
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.forms import UserCreationForm
@@ -11,7 +11,7 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.db.models import Q
-from attendance.forms import CustomUserCreationForm, QualitiesForm
+from attendance.forms import CustomUserCreationForm, QForm, QualitiesForm
 # from attendance.forms import SaveCourse
 # from attendance.models import Course, Department
 # from ams.settings import MEDIA_ROOT, MEDIA_URL
@@ -44,7 +44,7 @@ def course(request):
     
     context['page_title'] = "BACKEND INTERNAL | ADMIN"
     context['users'] = users
-    return render(request, 'course_mgt.html',context)
+    return render(request, 'user_mgt.html',context)
 
 @login_required
 def manage(request): 
@@ -52,16 +52,16 @@ def manage(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('course_mgt')
+            return redirect('user_mgt')
     else:
         form = CustomUserCreationForm()
         users=User.objects.all()
         context={'form': form, 'users': users}
-        return render(request, 'manage_course.html', context )
+        return render(request, 'manage_user.html', context )
 
 def dashboard(request):
     courses = User.objects.all()
-    return render(request, 'course_mgt.html', {'courses': courses})
+    return render(request, 'user_mgt.html', {'courses': courses})
     pass
 
 @login_required
@@ -70,7 +70,7 @@ def assign_qualities(request):
         form = QualitiesForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('dashboard')  
+            return redirect('score')  
     else:
         form = QualitiesForm()
         users = User.objects.all()
@@ -89,32 +89,20 @@ def assign_marks(request, pk=None):
     pass
 
 @login_required
+def view_scores_history(request):
+    # Your existing view logic here
+    
+    # Fetch previous and latest users
+    previous_users = Qualities.objects.order_by('-create_date').exclude(user=request.user)[:10]
+    latest_user = Qualities.objects.filter(user=request.user).order_by('-create_date').first()
 
+    context = {
+        'form': QForm,  # Replace with your actual form instance
+        'previous_users': previous_users,
+        'latest_user': latest_user,
+    }
 
-# @login_required
-# def save_course(request):
-#     resp = { 'status':'failed' , 'msg' : '' }
-#     if request.method == 'POST':
-#         course = None
-#         print(not request.POST['id'] == '')
-#         if not request.POST['id'] == '':
-#             course = User.objects.filter(id=request.POST['id']).first()
-#         if not course == None:
-#             form = SaveCourse(request.POST,instance = course)
-#         else:
-#             form = SaveCourse(request.POST)
-#     if form.is_valid():
-#         form.save()
-#         resp['status'] = 'success'
-#         messages.success(request, 'saved successfully')
-#     else:
-#         for field in form:
-#             for error in field.errors:
-#                 resp['msg'] += str(error + '<br>')
-#         if not course == None:
-#             form = SaveCourse(instance = course)
-       
-#     return HttpResponse(json.dumps(resp),content_type="application/json")
+    return render(request, 'score.html', context)
 
 @login_required
 def delete_course(request):

@@ -29,3 +29,14 @@ class Qualities(models.Model):
 
     def __str__(self):
         return self.user.username
+    @property
+    def get_user_record(self):
+        previous_qualities = Qualities.objects.filter(create_date__lt=self.create_date).order_by('-create_date').first()
+        latest_qualities = Qualities.objects.filter(create_date__gte=self.create_date).order_by('create_date').first()
+
+        record = {
+            'previous_user': previous_qualities.user.username if previous_qualities else None,
+            'latest_user': latest_qualities.user.username if latest_qualities else None,
+        }
+
+        return record
