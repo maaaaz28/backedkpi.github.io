@@ -7,8 +7,7 @@
   
 </header>
 <div class="container">
-  
-  <h2 class="subheading">{{ user_qualities.user.username }}'s</h2>
+  <h2 class="subheading">{{ user.username }}'s</h2>
   <form method="get" action="{% url 'dashboard' %}">
     <div class="tablehead" style="background-color: #263044; border-radius: 10px; padding: 10px;">
       <label for="userFilter" style="color: white;">Select User:</label>
@@ -253,7 +252,15 @@
   };
 
   var pieChart = Highcharts.chart('pieChart', pieChartOptions);
+
 </script>
 
+<script>
+  // Get today's date in the format YYYY-MM-DD
+  const today = new Date().toISOString().split('T')[0];
+
+  // Set the default value of the date input to today
+  document.getElementById('dateFilter').value = today;
+</script>
 {% endblock %}
 
